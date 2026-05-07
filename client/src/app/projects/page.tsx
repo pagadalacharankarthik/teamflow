@@ -201,7 +201,7 @@ export default function ProjectsPage() {
                                     <label className="text-[10px] font-black text-muted-foreground uppercase tracking-widest ml-1">Deploy Team (Select/Deselect)</label>
                                     <div className="max-h-40 overflow-y-auto border border-border rounded-2xl p-2 bg-muted/50 custom-scrollbar">
                                         {team?.map((m: any) => {
-                                            const isSelected = formData.members.includes(m._id);
+                                            const isSelected = formData.members.includes(m._id as string);
                                             return (
                                                 <button 
                                                     key={m._id}
