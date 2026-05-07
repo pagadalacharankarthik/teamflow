@@ -15,7 +15,7 @@ export default function ProjectsPage() {
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [selectedProject, setSelectedProject] = useState<any>(null);
     const [searchQuery, setSearchQuery] = useState('');
-    const [formData, setFormData] = useState({ name: '', description: '', members: [] });
+    const [formData, setFormData] = useState<{name: string, description: string, members: string[]}>({ name: '', description: '', members: [] });
 
     const { data: team } = useQuery({
         queryKey: ['team'],
