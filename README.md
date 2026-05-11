@@ -98,8 +98,9 @@ TeamFlow is architected for easy deployment on **Railway.app**.
 3. Add a service for the **Client** (Root: `/client`, Variable: `NEXT_PUBLIC_API_URL`).
 
 Demo Credentials
-Email: admin@gmail.com
-password: admin@123
+
+-Email: admin@gmail.com
+-password: admin@123
 
 ---
 
