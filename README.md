@@ -99,8 +99,8 @@ TeamFlow is architected for easy deployment on **Railway.app**.
 
 Demo Credentials
 
--Email: admin@gmail.com
--password: admin@123
+- Email: admin@gmail.com
+- password: admin@123
 
 ---
 
