@@ -3,7 +3,7 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
-import { Loader2, Zap, Shield, Layout } from 'lucide-react';
+import { Loader2, Zap, Shield, Layout, Github, Linkedin } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 export default function LandingPage() {
@@ -89,6 +89,35 @@ export default function LandingPage() {
                     ))}
                 </div>
             </main>
+            <footer className="border-t border-slate-100 bg-slate-50/50 py-12 mt-20">
+                <div className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-8">
+                    <div className="flex items-center gap-2">
+                        <div className="w-6 h-6 bg-indigo-600 rounded flex items-center justify-center text-white font-bold text-xs">T</div>
+                        <span className="text-lg font-bold text-slate-900">TeamFlow Pro</span>
+                    </div>
+                    
+                    <p className="text-slate-500 text-sm">© 2026 TeamFlow Pro. All rights reserved.</p>
+                    
+                    <div className="flex items-center gap-6">
+                        <a 
+                            href="https://github.com/pagadalacharankarthik" 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className="text-slate-400 hover:text-indigo-600 transition-colors"
+                        >
+                            <Github size={20} />
+                        </a>
+                        <a 
+                            href="https://www.linkedin.com/in/pagadala-charan-karthik-67a614354/" 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className="text-slate-400 hover:text-indigo-600 transition-colors"
+                        >
+                            <Linkedin size={20} />
+                        </a>
+                    </div>
+                </div>
+            </footer>
         </div>
     );
 }
