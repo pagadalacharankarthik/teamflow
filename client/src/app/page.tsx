@@ -3,7 +3,7 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
-import { Loader2, Zap, Shield, Layout, Github, LinkedinIcon } from 'lucide-react';
+import { Loader2, Zap, Shield, Layout, GithubIcon, LinkedinIcon } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 export default function LandingPage() {
