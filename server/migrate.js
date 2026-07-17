@@ -4,6 +4,12 @@ const User = require('./models/User');
 const Project = require('./models/Project');
 const Task = require('./models/Task');
 const Company = require('./models/Company');
+const dns = require('dns');
+
+// Force Node to use IPv4 first to avoid querySrv resolution failures on Windows
+if (dns.setDefaultResultOrder) {
+    dns.setDefaultResultOrder('ipv4first');
+}
 
 dotenv.config();
 
