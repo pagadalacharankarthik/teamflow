@@ -26,6 +26,11 @@ const userSchema = new mongoose.Schema({
         enum: ['admin', 'member'],
         default: 'member'
     },
+    company: {
+        type: mongoose.Schema.ObjectId,
+        ref: 'Company',
+        required: [true, 'Please associate a company']
+    },
     createdAt: {
         type: Date,
         default: Date.now

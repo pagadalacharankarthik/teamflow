@@ -14,6 +14,11 @@ const projectSchema = new mongoose.Schema({
         type: mongoose.Schema.ObjectId,
         ref: 'User',
         required: true
+     },
+    company: {
+        type: mongoose.Schema.ObjectId,
+        ref: 'Company',
+        required: true
     },
     members: [{
         type: mongoose.Schema.ObjectId,

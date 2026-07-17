@@ -9,7 +9,8 @@ router.post('/signup', signup);
 router.post('/login', login);
 router.post('/create', protect, authorize('admin'), createUser);
 router.get('/users', protect, (req, res) => {
-    User.find().select('name email role').then(users => res.json({ success: true, data: users }));
+    const companyId = req.user.company._id || req.user.company;
+    User.find({ company: companyId }).select('name email role').then(users => res.json({ success: true, data: users }));
 });
 
 module.exports = router;

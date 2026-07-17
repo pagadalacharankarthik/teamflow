@@ -12,7 +12,9 @@ export default function SignupPage() {
         name: '',
         email: '',
         password: '',
-        role: 'member'
+        role: 'member',
+        companyName: '',
+        companyCode: ''
     });
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
@@ -24,7 +26,14 @@ export default function SignupPage() {
         setLoading(true);
 
         try {
-            const res = await api.post('/auth/signup', formData);
+            const signupData = {
+                name: formData.name,
+                email: formData.email,
+                password: formData.password,
+                role: formData.role,
+                ...(formData.role === 'admin' ? { companyName: formData.companyName } : { companyCode: formData.companyCode })
+            };
+            const res = await api.post('/auth/signup', signupData);
             login(res.data.token, res.data.user);
         } catch (err: any) {
             setError(err.response?.data?.message || 'Registration failed. Please try again.');
@@ -101,6 +110,32 @@ export default function SignupPage() {
                             <option value="admin">Admin (Manager)</option>
                         </select>
                     </div>
+
+                    {formData.role === 'admin' ? (
+                        <div>
+                            <label className="block text-sm font-medium text-slate-700 mb-1">Company Name</label>
+                            <input
+                                type="text"
+                                required
+                                className="w-full px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent outline-none transition-all text-slate-900"
+                                placeholder="e.g. Acme Corp"
+                                value={formData.companyName}
+                                onChange={(e) => setFormData({ ...formData, companyName: e.target.value })}
+                            />
+                        </div>
+                    ) : (
+                        <div>
+                            <label className="block text-sm font-medium text-slate-700 mb-1">Company Invite Code</label>
+                            <input
+                                type="text"
+                                required
+                                className="w-full px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent outline-none transition-all text-slate-900"
+                                placeholder="e.g. COMP-123456"
+                                value={formData.companyCode}
+                                onChange={(e) => setFormData({ ...formData, companyCode: e.target.value })}
+                            />
+                        </div>
+                    )}
 
                     <button
                         type="submit"

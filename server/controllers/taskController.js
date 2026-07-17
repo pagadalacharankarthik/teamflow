@@ -7,10 +7,11 @@ const Project = require('../models/Project');
 exports.getTasks = async (req, res, next) => {
     try {
         let query;
+        const companyId = req.user.company._id || req.user.company;
         if (req.user.role === 'admin') {
-            query = Task.find();
+            query = Task.find({ company: companyId });
         } else {
-            query = Task.find({ assignedTo: req.user.id });
+            query = Task.find({ company: companyId, assignedTo: req.user.id });
         }
 
         const tasks = await query.populate('projectId assignedTo', 'name title');
@@ -26,6 +27,15 @@ exports.getTasks = async (req, res, next) => {
 // @access  Private/Admin
 exports.createTask = async (req, res, next) => {
     try {
+        const companyId = req.user.company._id || req.user.company;
+        
+        // Verify that the project belongs to the user's company
+        const project = await Project.findOne({ _id: req.body.projectId, company: companyId });
+        if (!project) {
+            return res.status(400).json({ success: false, message: 'Invalid Project or Project does not belong to your company' });
+        }
+
+        req.body.company = companyId;
         const task = await Task.create(req.body);
 
         res.status(201).json({ success: true, data: task });
@@ -39,7 +49,8 @@ exports.createTask = async (req, res, next) => {
 // @access  Private
 exports.updateStatus = async (req, res, next) => {
     try {
-        let task = await Task.findById(req.params.id);
+        const companyId = req.user.company._id || req.user.company;
+        let task = await Task.findOne({ _id: req.params.id, company: companyId });
 
         if (!task) {
             return res.status(404).json({ success: false, message: 'Task not found' });
@@ -66,7 +77,8 @@ exports.updateStatus = async (req, res, next) => {
 // @access  Private
 exports.submitTask = async (req, res, next) => {
     try {
-        let task = await Task.findById(req.params.id);
+        const companyId = req.user.company._id || req.user.company;
+        let task = await Task.findOne({ _id: req.params.id, company: companyId });
 
         if (!task) {
             return res.status(404).json({ success: false, message: 'Task not found' });
@@ -97,7 +109,8 @@ exports.submitTask = async (req, res, next) => {
 // @access  Private/Admin
 exports.approveTask = async (req, res, next) => {
     try {
-        let task = await Task.findById(req.params.id);
+        const companyId = req.user.company._id || req.user.company;
+        let task = await Task.findOne({ _id: req.params.id, company: companyId });
 
         if (!task) {
             return res.status(404).json({ success: false, message: 'Task not found' });

@@ -89,7 +89,14 @@ export default function Sidebar() {
                                 <div className="w-10 h-10 bg-accent rounded-2xl flex items-center justify-center text-white font-black text-xl shadow-xl shadow-accent/20">
                                     T
                                 </div>
-                                <span className="text-2xl font-black tracking-tighter text-slate-900 dark:text-white">TeamFlow</span>
+                                <div className="flex flex-col">
+                                    <span className="text-2xl font-black tracking-tighter text-slate-900 dark:text-white leading-none">TeamFlow</span>
+                                    {user?.company && (
+                                        <span className="text-[10px] font-black text-accent uppercase tracking-widest mt-1 truncate max-w-[120px] leading-none">
+                                            {user.company.name}
+                                        </span>
+                                    )}
+                                </div>
                             </div>
                             
                             {/* Notification Bell */}

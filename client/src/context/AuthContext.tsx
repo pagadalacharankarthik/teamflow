@@ -9,6 +9,11 @@ interface User {
     name: string;
     email: string;
     role: 'admin' | 'member';
+    company?: {
+        _id: string;
+        name: string;
+        code: string;
+    };
 }
 
 interface AuthContextType {

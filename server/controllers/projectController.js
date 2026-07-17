@@ -7,10 +7,12 @@ const User = require('../models/User');
 exports.getProjects = async (req, res, next) => {
     try {
         let projects;
+        const companyId = req.user.company._id || req.user.company;
         if (req.user.role === 'admin') {
-            projects = await Project.find().populate('members', 'name email');
+            projects = await Project.find({ company: companyId }).populate('members', 'name email');
         } else {
             projects = await Project.find({
+                company: companyId,
                 $or: [
                     { createdBy: req.user.id },
                     { members: req.user.id }
@@ -30,6 +32,7 @@ exports.getProjects = async (req, res, next) => {
 exports.createProject = async (req, res, next) => {
     try {
         req.body.createdBy = req.user.id;
+        req.body.company = req.user.company._id || req.user.company;
 
         const project = await Project.create(req.body);
         const populatedProject = await Project.findById(project._id).populate('members', 'name email');
@@ -45,16 +48,17 @@ exports.createProject = async (req, res, next) => {
 // @access  Private/Admin
 exports.addMember = async (req, res, next) => {
     try {
-        const project = await Project.findById(req.params.id);
+        const companyId = req.user.company._id || req.user.company;
+        const project = await Project.findOne({ _id: req.params.id, company: companyId });
 
         if (!project) {
             return res.status(404).json({ success: false, message: 'Project not found' });
         }
 
-        // Check if user exists
-        const user = await User.findOne({ email: req.body.email });
+        // Check if user exists within the same company
+        const user = await User.findOne({ email: req.body.email, company: companyId });
         if (!user) {
-            return res.status(404).json({ success: false, message: 'User not found' });
+            return res.status(404).json({ success: false, message: 'User not found in your company' });
         }
 
         if (project.members.includes(user._id)) {
@@ -75,7 +79,8 @@ exports.addMember = async (req, res, next) => {
 // @access  Private/Admin
 exports.updateProject = async (req, res, next) => {
     try {
-        let project = await Project.findById(req.params.id);
+        const companyId = req.user.company._id || req.user.company;
+        let project = await Project.findOne({ _id: req.params.id, company: companyId });
 
         if (!project) {
             return res.status(404).json({ success: false, message: 'Project not found' });
@@ -97,7 +102,8 @@ exports.updateProject = async (req, res, next) => {
 // @access  Private/Admin
 exports.deleteProject = async (req, res, next) => {
     try {
-        const project = await Project.findById(req.params.id);
+        const companyId = req.user.company._id || req.user.company;
+        const project = await Project.findOne({ _id: req.params.id, company: companyId });
 
         if (!project) {
             return res.status(404).json({ success: false, message: 'Project not found' });

@@ -20,6 +20,11 @@ const taskSchema = new mongoose.Schema({
         ref: 'User',
         required: true
     },
+    company: {
+        type: mongoose.Schema.ObjectId,
+        ref: 'Company',
+        required: true
+    },
     status: {
         type: String,
         enum: ['pending', 'in-progress', 'submitted', 'approved', 'overdue'],

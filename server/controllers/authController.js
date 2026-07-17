@@ -1,4 +1,5 @@
 const User = require('../models/User');
+const Company = require('../models/Company');
 const jwt = require('jsonwebtoken');
 
 // @desc    Register user
@@ -6,15 +7,44 @@ const jwt = require('jsonwebtoken');
 // @access  Public
 exports.signup = async (req, res, next) => {
     try {
-        const { name, email, password, role } = req.body;
+        const { name, email, password, role, companyName, companyCode } = req.body;
+
+        let companyId;
+
+        if (role === 'admin') {
+            if (!companyName) {
+                return res.status(400).json({ success: false, message: 'Please add a company name' });
+            }
+            
+            // Generate a unique company code
+            const code = 'COMP-' + Math.floor(100000 + Math.random() * 900000);
+            
+            const company = await Company.create({
+                name: companyName,
+                code
+            });
+            companyId = company._id;
+        } else {
+            if (!companyCode) {
+                return res.status(400).json({ success: false, message: 'Please provide a company invite code' });
+            }
+            const company = await Company.findOne({ code: companyCode.toUpperCase() });
+            if (!company) {
+                return res.status(400).json({ success: false, message: 'Invalid company invite code' });
+            }
+            companyId = company._id;
+        }
 
         // Create user
-        const user = await User.create({
+        let user = await User.create({
             name,
             email,
             password,
-            role
+            role,
+            company: companyId
         });
+
+        user = await User.findById(user._id).populate('company');
 
         sendTokenResponse(user, 201, res);
     } catch (err) {
@@ -38,7 +68,8 @@ exports.createUser = async (req, res, next) => {
             name,
             email,
             password: password || 'welcome123',
-            role: role || 'member'
+            role: role || 'member',
+            company: req.user.company._id || req.user.company // inherited from logged-in admin
         });
 
         res.status(201).json({
@@ -47,7 +78,8 @@ exports.createUser = async (req, res, next) => {
                 id: user._id,
                 name: user.name,
                 email: user.email,
-                role: user.role
+                role: user.role,
+                company: user.company
             }
         });
     } catch (err) {
@@ -68,7 +100,7 @@ exports.login = async (req, res, next) => {
         }
 
         // Check for user
-        const user = await User.findOne({ email }).select('+password');
+        const user = await User.findOne({ email }).select('+password').populate('company');
 
         if (!user) {
             return res.status(401).json({ success: false, message: 'Invalid credentials' });
@@ -101,7 +133,8 @@ const sendTokenResponse = (user, statusCode, res) => {
             id: user._id,
             name: user.name,
             email: user.email,
-            role: user.role
+            role: user.role,
+            company: user.company
         }
     });
 };

@@ -52,6 +52,11 @@ export default function TeamPage() {
                 <div>
                     <h1 className="text-2xl font-black tracking-tight mb-2 text-foreground">Team Directory</h1>
                     <p className="text-muted-foreground font-medium">Manage permissions and view organizational structure.</p>
+                    {currentUser?.company && (
+                        <p className="text-sm font-bold text-accent mt-2">
+                            Workspace: {currentUser.company.name} | Invite Code: <span className="bg-muted px-2.5 py-1 rounded-lg select-all border border-border">{currentUser.company.code}</span>
+                        </p>
+                    )}
                 </div>
                 <div className="flex items-center gap-4">
                     <div className="bg-card border border-border rounded-2xl shadow-sm px-6 py-2.5 flex items-center gap-4 group focus-within:border-accent transition-all w-full md:w-80">
