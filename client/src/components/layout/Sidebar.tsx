@@ -33,6 +33,13 @@ export default function Sidebar() {
 
     useEffect(() => setMounted(true), []);
 
+    // Close sidebar on mobile when navigating to a new page
+    useEffect(() => {
+        if (window.innerWidth < 1024) {
+            setIsOpen(false);
+        }
+    }, [pathname]);
+
     const { data: tasks } = useQuery({
         queryKey: ['tasks'],
         queryFn: async () => {
@@ -75,7 +82,7 @@ export default function Sidebar() {
                 {isOpen ? <X size={20} className="text-slate-900 dark:text-white" /> : <Menu size={20} className="text-slate-900 dark:text-white" />}
             </button>
 
-            <AnimatePresence mode='wait'>
+            <AnimatePresence initial={false} mode='wait'>
                 {isOpen && (
                     <motion.aside
                         initial={{ x: -300 }}
