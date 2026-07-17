@@ -97,6 +97,11 @@ TeamFlow is architected for easy deployment on **Railway.app**.
 2. Add a service for the **Server** (Root: `/server`, Variables: `MONGO_URI`, `JWT_SECRET`).
 3. Add a service for the **Client** (Root: `/client`, Variable: `NEXT_PUBLIC_API_URL`).
 
+Demo Credentials
+
+- Email: admin@gmail.com
+- password: admin@123
+
 ---
 
 ## 📝 License

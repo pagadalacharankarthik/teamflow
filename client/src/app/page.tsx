@@ -3,7 +3,7 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
-import { Loader2, Zap, Shield, Layout } from 'lucide-react';
+import { Loader2, Zap, Shield, Layout, Github, Linkedin } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const Github = ({ size = 20 }: { size?: number }) => (
@@ -101,7 +101,6 @@ export default function LandingPage() {
                     ))}
                 </div>
             </main>
-
             <footer className="border-t border-slate-100 bg-slate-50/50 py-12 mt-20">
                 <div className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-8">
                     <div className="flex items-center gap-2">
